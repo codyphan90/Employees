@@ -31,5 +31,22 @@ public class EmployeeBean {
 		this.employees = employees;
 	}
 	
+	public void create(){
+		//input code first 
+		
+	}
+	public void close(){
+		//back to summary
+	}
+	
+	public void submit(){
+		// change status from Draft ('D') --> outstanding ('O')
+		// have confirmation mess
+		
+	}
+	public void abort(){
+		//delete then back to summary
+		// have confirmation mess
+	}
 	
 }
