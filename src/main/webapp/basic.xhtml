@@ -7,12 +7,18 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-	<title>Hello World!</title>
+	<title>Employee Summary</title>
 </h:head>
+
 <h:body>
 	<h2>Employee Table</h2>
+	<h:button value="New" outcome="new" />
+	<br></br>
+	<br></br>
 	<h:form>
-		<p:dataTable value="#{employeeBean.employees}" var="employee" >
+		<p:dataTable value="#{employeeBean.employees}" var="employee" 
+		rows="5" paginator="true"
+		paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
 		
 		<p:column id="codeHeader" sortBy="#{employee.employeeCode}" filterBy="#{employee.employeeCode}" filterMatchMode="contains">
 			<f:facet name="header">

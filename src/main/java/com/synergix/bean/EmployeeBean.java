@@ -20,6 +20,7 @@ public class EmployeeBean {
 	public void init(){
 		String str = "SELECT n FROM Employee n";
 		employees = entityManager.createQuery(str, Employee.class).getResultList();
+		
 	}
 
 	public List<Employee> getEmployees() {
