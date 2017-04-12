@@ -18,7 +18,10 @@
 	<h:form>
 		<p:dataTable value="#{employeeBean.employees}" var="employee" 
 		rows="5" paginator="true"
-		paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+		paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		selectionMode="single" selection="#{employeeBean.selectedEmployee}" rowKey="#{employee.employeeCode}">
+		
+		<p:ajax event="rowSelect" listener="#{employeeBean.onRowSelectNavigate}" />
 		
 		<p:column id="codeHeader" sortBy="#{employee.employeeCode}" filterBy="#{employee.employeeCode}" filterMatchMode="contains">
 			<f:facet name="header">
