@@ -7,65 +7,90 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-	<title>Employee New</title>
+	<title>New Employee</title>
 </h:head>
 <h:body>
-	<h:panelGrid columns="2" cellpadding="5">
-		<p:outputLabel value="Employee Code:" />
-		<p:inputText id="code"
-			value="#{employeeBean.selectedEmployee.employeeCode}"
-			required="#{data.required}" />
+	<h:form>
+		<p:growl id="growl" life="2000" />
+		<h:panelGrid columns="2" cellpadding="5">
+			<p:outputLabel value="Employee Code:" />
+			<p:inputText id="code"
+				value="#{employeeBean.selectedEmployee.employeeCode}"
+				disabled="#{employeeBean.checkInputedCode()}"
+				required="#{data.required}" validator="#{employeeBean.validateCode}">
 
-		<p:outputLabel value="Employee Name:" />
-		<p:inputText id="name"
-			value="#{employeeBean.selectedEmployee.employeeName}"
-			required="#{data.required}" />
+			</p:inputText>
+			<p:outputLabel value="Employee Name:" />
+			<p:inputText id="name"
+				value="#{employeeBean.selectedEmployee.employeeName}"
+				required="#{data.required}" />
 
-		<h:outputText value="Date of Birth" />
-		<p:calendar id="cal"
-			value="#{employeeBean.selectedEmployee.employeeDob}" showOn="button"
-			pattern="dd-MM-yyyy" />
+			<h:outputText value="Date of Birth" />
+			<p:calendar id="cal"
+				value="#{employeeBean.selectedEmployee.employeeDob}" showOn="button"
+				pattern="dd-MM-yyyy" />
 
-		<p:outputLabel value="Employee Short Name:" />
-		<p:inputText id="short"
-			value="#{employeeBean.selectedEmployee.employeeShortname}" />
+			<p:outputLabel value="Employee Short Name:" />
+			<p:inputText id="short"
+				value="#{employeeBean.selectedEmployee.employeeShortname}" />
 
-		<p:outputLabel value="Gender:" />
-		<p:selectOneRadio id="selectOneRadio">
-			<f:selectItem itemLabel="Male" itemValue="1" />
-			<f:selectItem itemLabel="Female" itemValue="2" />
-		</p:selectOneRadio>
+			<p:outputLabel value="Gender:" />
+			<p:selectOneRadio id="selectOneRadio" value="#{employeeBean.selectedEmployee.employeeGender}">
+				<f:selectItem itemLabel="Male" itemValue="MALE" />
+				<f:selectItem itemLabel="Female" itemValue="FEMALE" />
+			</p:selectOneRadio>
 
-		<p:outputLabel value="Language:" />
-		<p:selectManyCheckbox id="selectManyCheckbox">
-			<f:selectItem itemLabel="English" itemValue="1" />
-			<f:selectItem itemLabel="Vietnamese" itemValue="2" />
-		</p:selectManyCheckbox>
+			<p:outputLabel value="Language:" />
+			<p:selectManyCheckbox id="selectManyCheckbox" value="#{employeeBean.selectedEmployee.employeeLanguages}">
+				<f:selectItem itemLabel="English" itemValue="ENGLISH" />
+				<f:selectItem itemLabel="Vietnamese" itemValue="VIETNAMESE" />
+			</p:selectManyCheckbox>
 
-		<p:outputLabel value="Employee Type:" />
-		<p:selectOneMenu id="console" value="#{selectOneMenuView.console}"
-			style="width:125px">
-			<f:selectItem itemLabel="Select One" itemValue="" />
-			<f:selectItem itemLabel="Domestic" itemValue="Domestic" />
-			<f:selectItem itemLabel="Commercial" itemValue="Commercial" />
-			<f:selectItem itemLabel="Dealer" itemValue="Dealer" />
-		</p:selectOneMenu>
+			<p:outputLabel value="Employee Type:" />
+			<p:selectOneMenu id="console"
+				value="#{employeeBean.selectedEmployee.employeeTypes}" 
+				style="width:125px">
+				<f:selectItem itemLabel="Domestic" itemValue="Domestic" />
+				<f:selectItem itemLabel="Commercial" itemValue="Commercial" />
+				<f:selectItem itemLabel="Dealer" itemValue="Dealer" />
+			</p:selectOneMenu>
 
-		<p:outputLabel value="Address:" />
-		<p:inputText id="address"
-			value="#{employeeBean.selectedEmployee.employeeAddress}" />
-	</h:panelGrid>
-	<br></br>
-	<p:growl id="growl" life="2000" />
-     
-    <p:commandButton value="Close" id="close" update="growl" actionListener="#{employeeBean.close}"  />
- 
-    <p:commandButton value="Submit" id="submit" actionListener="#{employeeBean.submit}" update="growl" />
-     
-    <p:commandButton value="Reset" id="reset" actionListener="#{employeeBean.abort}" update="growl"  />
- 
- 
-   
+			<p:outputLabel value="Address:" />
+			<p:inputText id="address"
+				value="#{employeeBean.selectedEmployee.employeeAddress}" />
+		</h:panelGrid>
+		<br></br>
+
+		<h:panelGrid columns="5">
+			<p:commandButton value="Close" id="close"
+				action="#{employeeBean.close}" ajax="false" />
+
+			<p:commandButton value="New" id="new"
+				action="#{employeeBean.createEmployee}" ajax="false" />
+
+			<p:commandButton value="Submit" id="submit"
+				actionListener="#{employeeBean.submit}" update="message">
+				<p:confirm header="Confirmation" message="Are you sure?"
+					icon="ui-icon-alert" />
+			</p:commandButton>
+
+			<p:commandButton value="Delete" id="delete"
+				actionListener="#{employeeBean.abort}" ajax="false">
+				<p:confirm header="Confirmation" message="Are you sure?"
+					icon="ui-icon-alert" />
+			</p:commandButton>
+			<p:growl id="message" showDetail="true" />
+			
+			<!--     confirm mess -->
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="Yes" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="No" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:panelGrid>
+
+	</h:form>
 
 </h:body>
 </html>

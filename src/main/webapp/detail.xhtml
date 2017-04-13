@@ -10,42 +10,53 @@
 	<title>Employee Detail</title>
 </h:head>
 <h:body>
+<h:form>
+	<p:growl id="growl" life="2000" />
 	<h:panelGrid columns="2" cellpadding="5">
 		<p:outputLabel value="Employee Code:" />
 		<p:inputText id="code"
 			value="#{employeeBean.selectedEmployee.employeeCode}"
-			required="#{data.required}" />
-
+			disabled="#{employeeBean.checkInputedCode()}"
+			required="#{data.required}" 
+			validator="#{employeeBean.validateCode}">
+			
+		</p:inputText>
 		<p:outputLabel value="Employee Name:" />
 		<p:inputText id="name"
 			value="#{employeeBean.selectedEmployee.employeeName}"
+			disabled="#{!employeeBean.checkInputedCode()}"
 			required="#{data.required}" />
 
 		<h:outputText value="Date of Birth" />
 		<p:calendar id="cal"
 			value="#{employeeBean.selectedEmployee.employeeDob}" showOn="button"
-			pattern="dd-MM-yyyy" />
+			pattern="dd-MM-yyyy" 
+			disabled="#{!employeeBean.checkInputedCode()}"/>
 
 		<p:outputLabel value="Employee Short Name:" />
 		<p:inputText id="short"
-			value="#{employeeBean.selectedEmployee.employeeShortname}" />
+			value="#{employeeBean.selectedEmployee.employeeShortname}" 
+			disabled="#{!employeeBean.checkInputedCode()}"/>
 
 		<p:outputLabel value="Gender:" />
-		<p:selectOneRadio id="selectOneRadio">
-			<f:selectItem itemLabel="Male" itemValue="1" />
-			<f:selectItem itemLabel="Female" itemValue="2" />
+		<p:selectOneRadio id="selectOneRadio"
+		disabled="#{!employeeBean.checkInputedCode()}" value="#{employeeBean.selectedEmployee.employeeGender}">
+			<f:selectItem itemLabel="Male" itemValue="MALE" />
+			<f:selectItem itemLabel="Female" itemValue="FEMALE" />
 		</p:selectOneRadio>
 
 		<p:outputLabel value="Language:" />
-		<p:selectManyCheckbox id="selectManyCheckbox">
-			<f:selectItem itemLabel="English" itemValue="1" />
-			<f:selectItem itemLabel="Vietnamese" itemValue="2" />
+		<p:selectManyCheckbox id="selectManyCheckbox"
+		     disabled="#{!employeeBean.checkInputedCode()}"
+		     >
+			<f:selectItem itemLabel="English" itemValue="ENGLISH" />
+			<f:selectItem itemLabel="Vietnamese" itemValue="VIETNAMESE" />
 		</p:selectManyCheckbox>
 
 		<p:outputLabel value="Employee Type:" />
-		<p:selectOneMenu id="console" value="#{selectOneMenuView.console}"
-			style="width:125px">
-			<f:selectItem itemLabel="Select One" itemValue="" />
+		<p:selectOneMenu id="console" value="#{employeeBean.selectedEmployee.employeeTypes}"
+			style="width:125px"
+			disabled="#{!employeeBean.checkInputedCode()}">
 			<f:selectItem itemLabel="Domestic" itemValue="Domestic" />
 			<f:selectItem itemLabel="Commercial" itemValue="Commercial" />
 			<f:selectItem itemLabel="Dealer" itemValue="Dealer" />
@@ -53,20 +64,32 @@
 
 		<p:outputLabel value="Address:" />
 		<p:inputText id="address"
-			value="#{employeeBean.selectedEmployee.employeeAddress}" />
+			value="#{employeeBean.selectedEmployee.employeeAddress}" 
+			disabled="#{!employeeBean.checkInputedCode()}"/>
 	</h:panelGrid>
 	<br></br>
-	<p:growl id="growl" life="2000" />
-     
-    <p:commandButton value="Close" id="close" update="growl" actionListener="#{employeeBean.close}"  />
-    <p:commandButton value="New" id="new" action="new.xhtml?faces-redirect=true" />
+	
+	<h:panelGrid columns="5">
+    <p:commandButton value="Close" id="close"  action="#{employeeBean.close}" ajax="false"  />
     
-    <p:commandButton value="Submit" id="submit" actionListener="#{employeeBean.submit}" update="growl" />
+    <p:commandButton value="New" id="new" action="#{employeeBean.createEmployee}" ajax="false"  />
+    
+    <p:commandButton value="Submit" id="submit" actionListener="#{employeeBean.submit}" update="message">
+    <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
+    </p:commandButton>
      
-    <p:commandButton value="Delete" id="delete" actionListener="#{employeeBean.abort}" update="growl"  />
+    <p:commandButton value="Delete" id="delete" actionListener="#{employeeBean.abort}" ajax="false">
+     <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
+    </p:commandButton>
+    <p:growl id="message" showDetail="true" />
+	<!--     confirm mess -->
+    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+    </p:confirmDialog>
+    </h:panelGrid>
  
- 
-   
+   </h:form>
 
 </h:body>
 </html>

@@ -1,6 +1,9 @@
 package model;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -14,7 +17,8 @@ import java.util.Date;
 @NamedQuery(name="Employee.findAll", query="SELECT e FROM Employee e")
 public class Employee implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	public static final String STATUS_DRAFT = "D";
+	public static final String STATUS_OUTSTANDING = "O";
 	@Id
 	@Column(name="EMPLOYEE_CODE")
 	private String employeeCode;
@@ -40,6 +44,20 @@ public class Employee implements Serializable {
 
 	@Column(name="EMPLOYEE_TYPES")
 	private String employeeTypes;
+	
+//	private String convertDate;
+//	
+//	
+//
+//	public String getConvertDate() {
+//		DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+//		return df.format(this.employeeDob);
+//		
+//	}
+//
+//	public void setConvertDate(String convertDate) {
+//		this.convertDate = convertDate;
+//	}
 
 	public Employee() {
 	}
