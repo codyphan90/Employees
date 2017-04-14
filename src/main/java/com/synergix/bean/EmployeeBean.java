@@ -7,10 +7,11 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.ConversationScoped;
 import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
@@ -18,15 +19,17 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
+//@ManagedBean
+@Named
 //@ConversationScoped
-//@ApplicationScoped
-@SessionScoped
+@ApplicationScoped
+//@SessionScoped
 //@Transactional
 public class EmployeeBean {
 	@Inject
@@ -34,21 +37,22 @@ public class EmployeeBean {
 
 	private List<Employee> employees;
 	private Employee selectedEmployee;
-	
-	private Date selectedEmployeeDate;
+	private Employee newEmployee;
 
-	
 
-	public String getSelectedEmployeeDate() {
-		return new SimpleDateFormat("dd-MM-yyyy").format(selectedEmployeeDate);
+
+	public Employee getNewEmployee() {
+		return newEmployee;
 	}
 
-	public void setSelectedEmployeeDate(Date selectedEmployeeDate) {
-		this.selectedEmployeeDate = selectedEmployeeDate;
+	public void setNewEmployee(Employee newEmployee) {
+		this.newEmployee = newEmployee;
 	}
 
 	@PostConstruct
 	public void init() {
+		selectedEmployee = new Employee();
+		
 		String str = "SELECT e FROM Employee e";
 		employees = entityManager.createQuery(str, Employee.class).getResultList();
 
@@ -75,14 +79,7 @@ public class EmployeeBean {
 		goToPage("detail.xhtml");
 	}
 
-	public void redirectNew(SelectEvent event) {
-		System.out.println("Navigation executed");
-		ConfigurableNavigationHandler configurableNavigationHandler = (ConfigurableNavigationHandler) FacesContext
-				.getCurrentInstance().getApplication().getNavigationHandler();
-
-		configurableNavigationHandler.performNavigation("new.xhtml?faces-redirect=true");
-
-	}
+	
 	public void goToPage(String toPage){
 		//using with p:commandbutton
 		ConfigurableNavigationHandler confNaviHandler = (ConfigurableNavigationHandler) FacesContext
@@ -94,14 +91,16 @@ public class EmployeeBean {
 	public void createEmployee() {
 		// input code first
 		selectedEmployee = new Employee();
-//		goToPage("detail.xhtml");
-		goToPage("new.xhtml");
+		goToPage("detail.xhtml");
+//		goToPage("new.xhtml");
 	}
 
 	
 
 	
 	public void close() {
+		String str = "SELECT e FROM Employee e";
+		employees = entityManager.createQuery(str, Employee.class).getResultList();
 		// back to summary
 		System.out.println("go to summary page");
 		goToPage("summary.xhtml");
@@ -111,9 +110,11 @@ public class EmployeeBean {
 		// have confirmation mess
 		// selectedEmployee.setStatus(Employee.STATUS_OUTSTANDING);
 		System.out.println("Info submit...");
-		entityManager.persist(selectedEmployee);
-//		entityManager.flush();
-		addMessage("Info save!!");
+		addMessage("Info saving!!");
+//		employees.add(newEmployee);
+		entityManager.persist(newEmployee);
+		entityManager.flush();
+		addMessage("Info saved!!");
 		
 //		goToPage("summary.xhtml");
 		
@@ -153,10 +154,18 @@ public class EmployeeBean {
 		}
 
 	}
+	public Date getToday() {
+        return new Date();
+    }
 
 	public void addMessage(String summary) {
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, null);
 		FacesContext.getCurrentInstance().addMessage(null, message);
+	}
+	
+	@PreDestroy
+	public void predestory(){
+		System.out.println("Destroy...");
 	}
 
 }

@@ -14,7 +14,7 @@
 	<h2>Employee Table</h2>
 	
 	<h:form>
-	<p:commandButton value="New" id="create" action="#{employeeBean.createEmployee}" ajax="false" />
+	<p:commandButton value="New" id="create" action="#{employeeBean.createEmployee}" />
 	<br/>
 	<br/>
 		<p:dataTable value="#{employeeBean.employees}" var="employee" 
@@ -42,8 +42,7 @@
 			<f:facet name="header">
 				<h:outputText value="Date of Birth"></h:outputText>
 			</f:facet>
-			<h:outputText value="#{employee.employeeDob.time}" >
-			<f:convertDateTime  pattern="dd-MM-yyyy"/>
+			<h:outputText value="#{employee.employeeDob}" >
 			</h:outputText>
 		</p:column>
 

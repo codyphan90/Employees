@@ -17,37 +17,39 @@
 		<p:inputText id="code"
 			value="#{employeeBean.selectedEmployee.employeeCode}"
 			disabled="#{employeeBean.checkInputedCode()}"
-			required="#{data.required}" 
 			validator="#{employeeBean.validateCode}">
-			
+			<p:ajax update="@form"></p:ajax>
 		</p:inputText>
 		<p:outputLabel value="Employee Name:" />
 		<p:inputText id="name"
+		disabled="#{!employeeBean.checkInputedCode()}"
 			value="#{employeeBean.selectedEmployee.employeeName}"
-			disabled="#{!employeeBean.checkInputedCode()}"
-			required="#{data.required}" />
+			 />
 
 		<h:outputText value="Date of Birth" />
 		<p:calendar id="cal"
+			maxdate="#{employeeBean.today}"
 			value="#{employeeBean.selectedEmployee.employeeDob}" showOn="button"
 			pattern="dd-MM-yyyy" 
-			disabled="#{!employeeBean.checkInputedCode()}"/>
+			disabled="#{!employeeBean.checkInputedCode()}"
+			/>
 
 		<p:outputLabel value="Employee Short Name:" />
 		<p:inputText id="short"
 			value="#{employeeBean.selectedEmployee.employeeShortname}" 
-			disabled="#{!employeeBean.checkInputedCode()}"/>
+			disabled="#{!employeeBean.checkInputedCode()}"
+			/>
 
 		<p:outputLabel value="Gender:" />
 		<p:selectOneRadio id="selectOneRadio"
-		disabled="#{!employeeBean.checkInputedCode()}" value="#{employeeBean.selectedEmployee.employeeGender}">
+		value="#{employeeBean.selectedEmployee.employeeGender}">
 			<f:selectItem itemLabel="Male" itemValue="MALE" />
 			<f:selectItem itemLabel="Female" itemValue="FEMALE" />
 		</p:selectOneRadio>
 
 		<p:outputLabel value="Language:" />
 		<p:selectManyCheckbox id="selectManyCheckbox"
-		     disabled="#{!employeeBean.checkInputedCode()}"
+		     
 		     >
 			<f:selectItem itemLabel="English" itemValue="ENGLISH" />
 			<f:selectItem itemLabel="Vietnamese" itemValue="VIETNAMESE" />
@@ -56,7 +58,7 @@
 		<p:outputLabel value="Employee Type:" />
 		<p:selectOneMenu id="console" value="#{employeeBean.selectedEmployee.employeeTypes}"
 			style="width:125px"
-			disabled="#{!employeeBean.checkInputedCode()}">
+			>
 			<f:selectItem itemLabel="Domestic" itemValue="Domestic" />
 			<f:selectItem itemLabel="Commercial" itemValue="Commercial" />
 			<f:selectItem itemLabel="Dealer" itemValue="Dealer" />
@@ -65,16 +67,16 @@
 		<p:outputLabel value="Address:" />
 		<p:inputText id="address"
 			value="#{employeeBean.selectedEmployee.employeeAddress}" 
-			disabled="#{!employeeBean.checkInputedCode()}"/>
+			/>
 	</h:panelGrid>
 	<br></br>
 	
 	<h:panelGrid columns="5">
-    <p:commandButton value="Close" id="close"  action="#{employeeBean.close}" ajax="false"  />
+    <p:commandButton value="Close" id="close"  action="#{employeeBean.close}"  ajax="false"  />
     
-    <p:commandButton value="New" id="new" action="#{employeeBean.createEmployee}" ajax="false"  />
+    <p:commandButton value="New" id="new" action="#{employeeBean.createEmployee}"  ajax="false" />
     
-    <p:commandButton value="Submit" id="submit" actionListener="#{employeeBean.submit}" update="message">
+    <p:commandButton value="Submit" id="submit" actionListener="#{employeeBean.submit}" update="message" >
     <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
     </p:commandButton>
      
